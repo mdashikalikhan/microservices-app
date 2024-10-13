@@ -1,4 +1,4 @@
-# Pilot project to dicover microservice architecture
+# Pilot project to discover microservice architecture
 
 **Run application with arguments**
 
