@@ -56,7 +56,8 @@ public class UserSecurity {
                  .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth-> auth
-                                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                //.requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                .requestMatchers("/users/**").permitAll()
                                /* .access(new WebExpressionAuthorizationManager("hasIpAddress('fe80::7f2a:96a5:cc95:195%7')"))*/
 
                                 .requestMatchers(HttpMethod.GET, "/h2/**").permitAll()
