@@ -80,13 +80,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         byte[] secretBytes = Base64.getEncoder().encode(token.getBytes());
         SecretKey secretKey= Keys.hmacShaKeyFor(secretBytes);
 
-
+        Instant now = Instant.now();
 
         String compact = Jwts.builder().subject(model.getUserId())
 
-                .expiration(Date.from(Instant.now()
-                        .plusMillis(300000)))
-                .issuedAt(Date.from(Instant.now()))
+                .expiration(Date.from(now
+                        .plusMillis(300000l)))
+                .issuedAt(Date.from(now))
                 .signWith(secretKey)
                 .compact();
 

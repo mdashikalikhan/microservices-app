@@ -35,10 +35,11 @@ public class AuthorizationHeaderFilter extends
         return (exchange, chain)->{
             ServerHttpRequest request = exchange.getRequest();
             if(!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
+                System.out.println(request.getPath());
                 return onError(exchange, "No authorization header",
                         HttpStatus.UNAUTHORIZED);
             }
-            System.out.println("No ISSUE");
+            //System.out.println("No ISSUE");
             /*exchange.getRequest().mutate().headers(
               httpHeader->{
                   httpHeader.remove(HttpHeaders.AUTHORIZATION);
@@ -80,7 +81,7 @@ public class AuthorizationHeaderFilter extends
 
         String subject = null;
 
-
+        System.out.println(environment.getProperty("token.key"));
 
         try {
             String tokenKey = environment.getProperty("token.key");
@@ -91,10 +92,14 @@ public class AuthorizationHeaderFilter extends
 
             JwtParser parser = Jwts.parser().verifyWith(secretKey).build();
 
+
+            System.out.println(parser.parseSignedClaims(token).getPayload().toString());
+
             subject = parser.parseSignedClaims(token).getPayload().getSubject();
 
         } catch (Exception e) {
             isValid = false;
+            System.out.println(e.getMessage());
         }
 
         if(subject==null || subject.isEmpty()){
