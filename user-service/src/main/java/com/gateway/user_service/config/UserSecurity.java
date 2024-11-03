@@ -19,10 +19,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @AllArgsConstructor
+@EnableWebSecurity
 public class UserSecurity {
 
     private UserService userService;
@@ -35,6 +37,7 @@ public class UserSecurity {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+
 
         AuthenticationManagerBuilder authenticationBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 
@@ -56,12 +59,14 @@ public class UserSecurity {
                  .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth-> auth
-                                //.requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                /*//.requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .requestMatchers("/users/**").permitAll()
-                               /* .access(new WebExpressionAuthorizationManager("hasIpAddress('fe80::7f2a:96a5:cc95:195%7')"))*/
+                               *//* .access(new WebExpressionAuthorizationManager("hasIpAddress('fe80::7f2a:96a5:cc95:195%7')"))*//*
 
                                 .requestMatchers(HttpMethod.GET, "/h2/**").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().authenticated()*/
+                                .requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/h2/**")).permitAll()
 
                         )
                 .addFilter(authenticationFilter)
