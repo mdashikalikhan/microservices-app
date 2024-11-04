@@ -1,6 +1,7 @@
 package com.gateway.apigateway.configuration;
 
 import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Component
@@ -81,21 +83,16 @@ public class AuthorizationHeaderFilter extends
 
         String subject = null;
 
-        System.out.println(environment.getProperty("token.key"));
 
         try {
             String tokenKey = environment.getProperty("token.key");
 
-            byte[] secretBytes = Base64.getEncoder().encode(token.getBytes());
 
-            SecretKey secretKey = Keys.hmacShaKeyFor(secretBytes);
+            SecretKey secretKey = Keys.hmacShaKeyFor(tokenKey.getBytes(StandardCharsets.UTF_8));
 
-            JwtParser parser = Jwts.parser().verifyWith(secretKey).build();
+            JwtParserBuilder parserBuilder = Jwts.parser().setSigningKey(secretKey);
 
-
-            System.out.println(parser.parseSignedClaims(token).getPayload().toString());
-
-            subject = parser.parseSignedClaims(token).getPayload().getSubject();
+            subject = parserBuilder.build().parseClaimsJws(token).getBody().getSubject();
 
         } catch (Exception e) {
             isValid = false;

@@ -3,6 +3,8 @@ package com.gateway.user_service.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gateway.user_service.model.LoginRequestModel;
 import com.gateway.user_service.model.UserDomainModel;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,6 +25,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -40,9 +44,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        if(!request.getMethod().equals("POST")) {
+        /*if(!request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
-        }
+        }*/
 
         try {
             LoginRequestModel loginRequestModel =
@@ -61,6 +65,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     }
 
+    private String generateSecureKey() {
+        SecureRandom random = new SecureRandom();
+        byte[] keyBytes = new byte[64]; // 64 bytes for 512-bit key
+        random.nextBytes(keyBytes);
+        return Base64.getEncoder().encodeToString(keyBytes);
+    }
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
@@ -77,8 +87,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = environment.getProperty("token.key");
 
-        byte[] secretBytes = Base64.getEncoder().encode(token.getBytes());
-        SecretKey secretKey= Keys.hmacShaKeyFor(secretBytes);
+        SecretKey secretKey= Keys.hmacShaKeyFor(token.getBytes(StandardCharsets.UTF_8));
 
         Instant now = Instant.now();
 
@@ -93,5 +102,27 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader("token", compact);
         response.addHeader("userId", model.getUserId());
 
+
+
+
+    }
+
+    private void checkComapct(String compact) {
+        String subject = null;
+
+
+        try {
+            String tokenKey = environment.getProperty("token.key");
+
+
+            SecretKey secretKey = Keys.hmacShaKeyFor(tokenKey.getBytes(StandardCharsets.UTF_8));
+
+            JwtParserBuilder parserBuilder = Jwts.parser().setSigningKey(secretKey);
+
+            subject = parserBuilder.build().parseClaimsJws(compact).getBody().getSubject();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

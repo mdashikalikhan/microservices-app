@@ -67,7 +67,7 @@ public class UserSecurity {
                                 .requestMatchers(new AntPathRequestMatcher("/h2/**")).permitAll()*/
 
                         )
-                .addFilter(authenticationFilter)
+                //.addFilter( authenticationFilter)
                 .authenticationManager(authenticationManager)
                 .sessionManagement(sess->sess.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS
