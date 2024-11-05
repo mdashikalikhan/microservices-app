@@ -19,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -51,6 +52,9 @@ public class UserSecurity {
 
         authenticationFilter.setFilterProcessesUrl(
                 environment.getProperty("login.url.path"));
+
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(environment.getProperty("token.key"));
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
@@ -67,7 +71,8 @@ public class UserSecurity {
                                 .requestMatchers(new AntPathRequestMatcher("/h2/**")).permitAll()*/
 
                         )
-                //.addFilter( authenticationFilter)
+                .addFilter( authenticationFilter)
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationManager(authenticationManager)
                 .sessionManagement(sess->sess.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS
