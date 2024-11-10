@@ -85,6 +85,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         model.setFirstName("MD ASHIK");
         model.setLastName("ALI KHAN");
 
+        /*System.out.println("expiration: " + environment
+                .getProperty("token.expiration"));*/
 
         String token = environment.getProperty("token.key");
 
