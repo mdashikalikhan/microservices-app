@@ -31,6 +31,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -94,7 +95,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String compact = Jwts.builder().subject(model.getUserId())
 
                 .expiration(Date.from(now
-                        .plusMillis(300000l)))
+                        .plusMillis(
+                                Long.parseLong(
+                                        Objects
+                                                .requireNonNull(environment
+                                                        .getProperty("token.expiration"))))))
                 .issuedAt(Date.from(now))
                 .signWith(secretKey)
                 .compact();
