@@ -20,3 +20,13 @@ java -jar APP.jar --server.port=8999 --spring.application.instance_id=dhn
 **URL:** http://localhost:15672/
 
 **User/Password:** guest/guest
+
+**Spring Cloud Bus in Spring Cloud Config Server - Automatc Configuration update to all Microservice from private Git Repository:**
+
+<ul>
+  <li>Config Server Push configuration to Rabbit MQ by sending busrefresh request</li>
+  <li>URL: <b>POST http://localhost:9292/actuator/busrefresh</b></li>
+  <li>All microservices are notified the new properties values</li>
+</ul>
+
+
