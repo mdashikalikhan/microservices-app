@@ -16,7 +16,8 @@ public class UserController {
 
     @GetMapping("/status")
     public String status(){
-        return "Running on port: " + environment.getProperty("local.server.port");
+        return "Running on port: " + environment.getProperty("local.server.port")
+                + ", value=" + environment.getProperty("label.value");
     }
 
     @PostMapping
