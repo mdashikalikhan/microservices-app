@@ -63,9 +63,9 @@ public class UserSecurity {
                  .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth-> auth
-                                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users", "/h2/**").permitAll()
 
-                                .requestMatchers(HttpMethod.GET, "/h2/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/h2/**", "/actuator/**").permitAll()
                                 .anyRequest().authenticated()
                                 /*.requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/h2/**")).permitAll()*/
