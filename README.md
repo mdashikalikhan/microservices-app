@@ -27,6 +27,7 @@ java -jar APP.jar --server.port=8999 --spring.application.instance_id=dhn
   <li>Config Server Push configuration to Rabbit MQ by sending busrefresh request</li>
   <li>URL: <b>POST http://localhost:9292/actuator/busrefresh</b></li>
   <li>All microservices are notified the new properties values</li>
+  <li>properties configuration <b>GET http://localhost:9292/user-service/default</b></li>
 </ul>
 
 **API Gateway actuator:**
