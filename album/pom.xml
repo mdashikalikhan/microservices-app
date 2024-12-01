@@ -15,10 +15,10 @@
 	<description>Pilot project of microservice</description>
 	<url/>
 	<licenses>
-		<license/>
+		<license>L1.0.1</license>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>Md. Ashik Ali Khan</developer>
 	</developers>
 	<scm>
 		<connection/>
@@ -38,6 +38,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
