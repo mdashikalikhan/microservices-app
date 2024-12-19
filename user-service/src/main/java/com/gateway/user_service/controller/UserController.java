@@ -1,11 +1,11 @@
 package com.gateway.user_service.controller;
 
+import com.gateway.user_service.model.UserResponseModel;
+import com.gateway.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -13,6 +13,8 @@ public class UserController {
 
     @Autowired
     private Environment environment;
+
+    private UserService userService;
 
     @GetMapping("/status")
     public String status(){
@@ -26,5 +28,10 @@ public class UserController {
     @PostMapping
     public String createUser(){
         return "User created";
+    }
+
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<UserResponseModel> getUser(@PathVariable("userId") String userId){
+        return ResponseEntity.ofNullable(userService.findByUserId(userId));
     }
 }
