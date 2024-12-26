@@ -7,6 +7,10 @@ import com.gateway.user_service.model.UserDomainModel;
 import com.gateway.user_service.model.UserResponseModel;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     private RestTemplate restTemplate;
+
+    private Environment environment;
     @Override
     public UserDomainModel createUser(UserDomainModel user) {
         return null;
@@ -43,14 +49,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseModel findByUserId(String useId) {
-        UserEntity userEntity = userRepository.findUserById(useId)
-                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + useId));
+    public UserResponseModel findByUserId(String userId) {
+        UserEntity userEntity = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + userId));
         ModelMapper modelMapper = new ModelMapper();
         UserResponseModel userResponseModel = modelMapper.map(userEntity, UserResponseModel.class);
 
-        List<AlbumResponseModel> albumResponseModelList
-                restTemplate.exchange()
+
+        String albumUrl = String.format(environment.getProperty("albums.url"), userId);
+        ResponseEntity<List<AlbumResponseModel>> listResponseEntity = restTemplate.exchange(albumUrl, HttpMethod.GET, null, new
+                ParameterizedTypeReference<List<AlbumResponseModel>>(){});
+
+        List<AlbumResponseModel> albumList = listResponseEntity.getBody();
+
+        userResponseModel.setAlbums(albumList);
+
         return userResponseModel;
     }
 }

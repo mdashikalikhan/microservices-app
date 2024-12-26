@@ -18,6 +18,7 @@ public class UserController {
 
     @GetMapping("/status")
     public String status(){
+        System.out.println(String.format(environment.getProperty("albums.url"), "123"));
         return "Running on port: " + environment.getProperty("local.server.port")
                 + ", value=" + environment.getProperty("label.value")
                 + ", user.home=" + environment.getProperty("user.home")
