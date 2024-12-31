@@ -35,3 +35,8 @@ java -jar APP.jar --server.port=8999 --spring.application.instance_id=dhn
   <li>GET http://localhost:7080/actuator</li>
 </ul>
 
+**User microservice call Album microservice through API Gateway:**
+
+<ul>
+  <li>GET http://localhost:7080/query/{userId}</li>
+</ul>
