@@ -2,6 +2,7 @@ package com.gateway.user_service.controller;
 
 import com.gateway.user_service.model.UserResponseModel;
 import com.gateway.user_service.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@AllArgsConstructor
 public class UserController {
 
     @Autowired
