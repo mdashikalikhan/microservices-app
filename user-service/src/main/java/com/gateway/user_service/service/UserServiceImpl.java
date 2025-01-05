@@ -31,7 +31,9 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private RestTemplate restTemplate;
+    //private RestTemplate restTemplate;
+
+    private AlbumServiceClient albumServiceClient;
 
     private Environment environment;
     @Override
@@ -56,11 +58,13 @@ public class UserServiceImpl implements UserService {
         UserResponseModel userResponseModel = modelMapper.map(userEntity, UserResponseModel.class);
 
 
-        String albumUrl = String.format(environment.getProperty("albums.url"), userId);
+        /*String albumUrl = String.format(environment.getProperty("albums.url"), userId);
         ResponseEntity<List<AlbumResponseModel>> listResponseEntity = restTemplate.exchange(albumUrl, HttpMethod.GET, null, new
                 ParameterizedTypeReference<List<AlbumResponseModel>>(){});
 
-        List<AlbumResponseModel> albumList = listResponseEntity.getBody();
+        List<AlbumResponseModel> albumList = listResponseEntity.getBody();*/
+
+        List<AlbumResponseModel> albumList = albumServiceClient.getAlbums(userId).getBody();
 
         userResponseModel.setAlbums(albumList);
 
