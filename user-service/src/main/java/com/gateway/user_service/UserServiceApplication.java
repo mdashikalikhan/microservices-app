@@ -1,5 +1,6 @@
 package com.gateway.user_service;
 
+import feign.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
@@ -37,5 +38,10 @@ public class UserServiceApplication {
 	@LoadBalanced
 	public RestTemplate getRestTemplate(){
 		return new RestTemplate();
+	}
+
+	@Bean
+	public Logger.Level feignLogger(){
+		return Logger.Level.FULL;
 	}
 }
