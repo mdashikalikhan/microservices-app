@@ -40,3 +40,9 @@ java -jar APP.jar --server.port=8999 --spring.application.instance_id=dhn
 <ul>
   <li>GET http://localhost:7080/query/{userId}</li>
 </ul>
+
+**Resilience4j circuit brekaer implemented. Check circuit breaker events:**
+
+<ul>
+  <li>GET http://localhost:7080/user/actuator/circuitbreakerevents</li>
+</ul>
