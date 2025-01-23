@@ -2,6 +2,7 @@ package com.gateway.user_service.service;
 
 import com.gateway.user_service.model.AlbumResponseModel;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.List;
 public interface AlbumServiceClient {
 
     @GetMapping("/user/{id}")
+    @Retry(name = "album-service")
     @CircuitBreaker(name = "album-service", fallbackMethod = "getAlbumsFallback")
     public ResponseEntity<List<AlbumResponseModel>> getAlbums(@PathVariable("id") String id);
 
