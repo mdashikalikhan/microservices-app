@@ -6,6 +6,7 @@ import com.gateway.user_service.model.AlbumResponseModel;
 import com.gateway.user_service.model.UserDomainModel;
 import com.gateway.user_service.model.UserResponseModel;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private BCryptPasswordEncoder encoder;
@@ -64,7 +66,11 @@ public class UserServiceImpl implements UserService {
 
         List<AlbumResponseModel> albumList = listResponseEntity.getBody();*/
 
+        log.debug("Before calling album Microservice");
+
         List<AlbumResponseModel> albumList = albumServiceClient.getAlbums(userId).getBody();
+
+        log.debug("After calling album Microservice");
 
         userResponseModel.setAlbums(albumList);
 
