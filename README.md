@@ -46,3 +46,11 @@ java -jar APP.jar --server.port=8999 --spring.application.instance_id=dhn
 <ul>
   <li>GET http://localhost:7080/user/actuator/circuitbreakerevents</li>
 </ul>
+
+**Install and run Zipkin for tracing:**
+
+<ul>
+  <li>curl -sSL https://zipkin.io/quickstart.sh | bash -s</li>
+  <li>java -jar zipkin.jar</li>
+</ul>
+
